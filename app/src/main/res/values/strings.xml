@@ -1,7 +1,21 @@
 <resources>
     <string name="app_name">Exercise History</string>
     <string name="action_settings">Settings</string>
-    <string name="hint_word">Exercise...</string>
+
+    <string name="label_exercise_name">Exercise:</string>
+    <string name="label_sets">Sets:</string>
+    <string name="label_reps">Reps:</string>
+    <string name="label_did_pass">Did Pass:</string>
+    <string name="label_exercise_date">Date Done:</string>
+
+    <string name="hint_exercise_name">Exercise...</string>
+    <string name="hint_sets">Sets...</string>
+    <string name="hint_reps">Reps...</string>
+    <string name="hint_exercise_date">mm/dd/yyyy</string>
+
+    <string name="change_date">Change</string>
+
+
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Exercise not saved because it is empty.</string>
 </resources>

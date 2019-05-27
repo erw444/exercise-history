@@ -16,7 +16,7 @@ public class ExerciseHistoryRepository {
         mExerciseHistory = mExerciseHistoryDao.loadExerciseHistory();
     }
 
-    LiveData<List<ExerciseHistoryEntity>> getmExerciseHistory(){
+    LiveData<List<ExerciseHistoryEntity>> getExerciseHistory(){
         return mExerciseHistory;
     }
 
