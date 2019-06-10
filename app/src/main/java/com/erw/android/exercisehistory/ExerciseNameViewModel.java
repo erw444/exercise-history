@@ -27,5 +27,10 @@ public class ExerciseNameViewModel extends AndroidViewModel {
         mRepo.insert(exerciseName);
     }
 
+    //TODO maybe do this at the REPO directly.
+    public ExerciseName getExerciseName(String exerciseName){
+        return mRepo.getExerciseName(exerciseName);
+    }
+
 
 }

@@ -12,7 +12,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 
-@Database(entities = {ExerciseHistoryEntity.class, ExerciseName.class}, version = 1, exportSchema = false)
+@Database(entities = {ExerciseHistoryEntity.class, ExerciseName.class}, version = 2, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -27,6 +27,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         AppDatabase.class, AppDatabase.DATABASE_NAME)
                         .addCallback(sRoomDatabaseCallback)
+                        .fallbackToDestructiveMigration()
                         .build();
             }
         }

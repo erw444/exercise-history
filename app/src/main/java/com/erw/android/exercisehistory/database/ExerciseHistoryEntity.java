@@ -15,8 +15,8 @@ public class ExerciseHistoryEntity {
 
     @ColumnInfo(name = "exercise_name")
     private String exerciseName;
-    private int sets;
-    private int reps;
+    private String sets;
+    private String reps;
 
     @ColumnInfo(name = "did_pass")
     private boolean didPass;
@@ -28,7 +28,7 @@ public class ExerciseHistoryEntity {
     private Date updatedAt;
 
     @Ignore
-    public ExerciseHistoryEntity(String exerciseName, int sets, int reps, boolean didPass, Date exerciseDate, Date updatedAt){
+    public ExerciseHistoryEntity(String exerciseName, String sets, String reps, boolean didPass, Date exerciseDate, Date updatedAt){
         this.exerciseName = exerciseName;
        this.sets = sets;
        this.reps = reps;
@@ -36,13 +36,17 @@ public class ExerciseHistoryEntity {
        this.exerciseDate = updatedAt;
     }
 
-    public ExerciseHistoryEntity(int id, String exerciseName, int sets, int reps, boolean didPass, Date exerciseDate, Date updatedAt) {
+    public ExerciseHistoryEntity(int id, String exerciseName, String sets, String reps, boolean didPass, Date exerciseDate, Date updatedAt) {
         this.id = id;
         this.exerciseName = exerciseName;
         this.sets = sets;
         this.reps = reps;
         this.didPass = didPass;
         this.exerciseDate = updatedAt;
+    }
+
+    public ExerciseHistoryEntity(){
+
     }
 
     public String getExerciseName() {
@@ -61,19 +65,19 @@ public class ExerciseHistoryEntity {
         this.id = id;
     }
 
-    public int getSets() {
+    public String getSets() {
         return sets;
     }
 
-    public void setSets(int sets) {
+    public void setSets(String sets) {
         this.sets = sets;
     }
 
-    public int getReps() {
+    public String getReps() {
         return reps;
     }
 
-    public void setReps(int reps) {
+    public void setReps(String reps) {
         this.reps = reps;
     }
 

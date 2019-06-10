@@ -4,19 +4,21 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import com.erw.android.exercisehistory.ExerciseHistory;
+
 import java.util.List;
 
 public class ExerciseHistoryRepository {
     private ExerciseHistoryDao mExerciseHistoryDao;
     private LiveData<List<ExerciseHistoryEntity>> mExerciseHistory;
 
-    ExerciseHistoryRepository(Application app){
+    public ExerciseHistoryRepository(Application app){
         AppDatabase db = AppDatabase.getInstance(app);
         mExerciseHistoryDao = db.getExerciseHistoryDao();
         mExerciseHistory = mExerciseHistoryDao.loadExerciseHistory();
     }
 
-    LiveData<List<ExerciseHistoryEntity>> getExerciseHistory(){
+    public LiveData<List<ExerciseHistoryEntity>> getExerciseHistory(){
         return mExerciseHistory;
     }
 

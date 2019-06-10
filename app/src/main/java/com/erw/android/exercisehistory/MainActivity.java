@@ -1,5 +1,6 @@
 package com.erw.android.exercisehistory;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -15,13 +16,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.erw.android.exercisehistory.database.ExerciseHistoryEntity;
 import com.erw.android.exercisehistory.database.ExerciseName;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ExerciseNameViewModel mExerciseNameViewModel;
+    private ExerciseHistoryViewModel mExerciseHistoryViewModel;
+    //private ExerciseNameViewModel mExerciseNameViewModel;
 
     public static final int NEW_EXERCISE_ACTIVITY_REQUEST_CODE = 1;
 
@@ -42,17 +48,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final ExerciseNamesAdapter adapter = new ExerciseNamesAdapter(this);
+        final ExerciseHistoryAdapter adapter = new ExerciseHistoryAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mExerciseNameViewModel = ViewModelProviders.of(this).get(ExerciseNameViewModel.class);
+        mExerciseHistoryViewModel = ViewModelProviders.of(this).get(ExerciseHistoryViewModel.class);
 
-        mExerciseNameViewModel.getExerciseNames().observe(this, new Observer<List<ExerciseName>>() {
+        mExerciseHistoryViewModel.getExerciseHistory().observe(this, new Observer<List<ExerciseHistoryEntity>>() {
             @Override
-            public void onChanged(@Nullable final List<ExerciseName> exerciseNames) {
-                // Update the cached copy of the words in the adapter.
-                adapter.setExerciseNames(exerciseNames);
+            public void onChanged(@Nullable final List<ExerciseHistoryEntity> exerciseHistory) {
+                adapter.setExerciseHistory(exerciseHistory);
             }
         });
     }
@@ -83,13 +88,42 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_EXERCISE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            ExerciseName exerciseName = new ExerciseName(data.getStringExtra(NewExerciseActivity.EXTRA_REPLY));
-            mExerciseNameViewModel.insert(exerciseName);
+            //TODO: create ExerciseHistory view model
+            //TODO: Create new adapter for the Exercise History
+            //TODO: change to insert exercise into exercise history
+            ExerciseHistory exerciseHistory = data.getParcelableExtra((NewExerciseActivity.EXTRA_EXERCISE_HISTORY));
+
+            //TODO: update to get exerciseName object from database.
+            //ExerciseName exerciseName = mExerciseNameViewModel.getExerciseName(exerciseHistory.getExerciseName());
+            ExerciseHistoryEntity entity = new ExerciseHistoryEntity();
+
+            entity.setExerciseName(exerciseHistory.getExerciseName());
+            entity.setSets(exerciseHistory.getSets());
+            entity.setReps((exerciseHistory.getReps()));
+            entity.setDidPass(exerciseHistory.isDidPass());
+            entity.setExerciseDate(stringToDate(exerciseHistory.getExerciseDate()));
+
+            mExerciseHistoryViewModel.insert(entity);
+
+           // ExerciseName exerciseName = new ExerciseName(data.getStringExtra(NewExerciseActivity.EXTRA_EXERCISE_HISTORY));
+           // mExerciseNameViewModel.insert(exerciseName);
         } else {
             Toast.makeText(
                     getApplicationContext(),
                     R.string.empty_not_saved,
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    private Date stringToDate(String dateString){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = new Date();
+        try {
+            date = dateFormat.parse(dateString);
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return date;
+
     }
 }

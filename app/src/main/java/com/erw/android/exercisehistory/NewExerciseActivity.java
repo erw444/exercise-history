@@ -16,12 +16,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class NewExerciseActivity extends AppCompatActivity {
-    public static final String EXTRA_REPLY = "com.example.android.wordlistsql.REPLY";
+    public static final String EXTRA_EXERCISE_HISTORY = "com.erw.android.exercisehistory.EXERCISEHISTORY";
 
     private EditText mEditExerciseName;
     private EditText mEditSets;
@@ -40,7 +41,7 @@ public class NewExerciseActivity extends AppCompatActivity {
         mTextExerciseDate = findViewById(R.id.value_exercise_date);
 
         Date currentTime = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         String now = dateFormat.format(new Date());
         mTextExerciseDate.setText(now);
 
@@ -52,7 +53,19 @@ public class NewExerciseActivity extends AppCompatActivity {
                     setResult(RESULT_CANCELED, replyIntent);
                 } else {
                     String exerciseName = mEditExerciseName.getText().toString();
-                    replyIntent.putExtra(EXTRA_REPLY, exerciseName);
+                    String sets = mEditSets.getText().toString();
+                    String reps = mEditReps.getText().toString();
+                    boolean didPass = mCheckDidPass.isChecked();
+                    String exerciseDate = mTextExerciseDate.getText().toString();
+
+                    ExerciseHistory exerciseHistory = new ExerciseHistory();
+                    exerciseHistory.setExerciseName(exerciseName);
+                    exerciseHistory.setSets(sets);
+                    exerciseHistory.setReps(reps);
+                    exerciseHistory.setDidPass(didPass);
+                    exerciseHistory.setExerciseDate(exerciseDate);
+
+                    replyIntent.putExtra(EXTRA_EXERCISE_HISTORY, exerciseHistory);
                     setResult(RESULT_OK, replyIntent);
                 }
                 finish();
