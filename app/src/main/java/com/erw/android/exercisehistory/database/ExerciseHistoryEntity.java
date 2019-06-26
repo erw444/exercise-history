@@ -3,18 +3,28 @@ package com.erw.android.exercisehistory.database;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.erw.android.exercisehistory.DateUtils;
 
 import java.util.Date;
+import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "exercise_history")
-public class ExerciseHistoryEntity {
+@Entity(tableName = "exercise_history", foreignKeys = @ForeignKey(entity = ExerciseName.class,
+                                                                    parentColumns = "exercise_name_id",
+                                                                    childColumns =  "eh_exercise_name_id",
+                                                                    onDelete = CASCADE))
+public class ExerciseHistoryEntity implements Parcelable {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "exercise_history_id")
     private int id;
 
-    @ColumnInfo(name = "exercise_name")
-    private String exerciseName;
+    @ColumnInfo(name = "eh_exercise_name_id")
+    private int exerciseNameId;
     private String sets;
     private String reps;
 
@@ -28,17 +38,18 @@ public class ExerciseHistoryEntity {
     private Date updatedAt;
 
     @Ignore
-    public ExerciseHistoryEntity(String exerciseName, String sets, String reps, boolean didPass, Date exerciseDate, Date updatedAt){
-        this.exerciseName = exerciseName;
+    public ExerciseHistoryEntity(int exerciseNameId, String sets, String reps, boolean didPass, Date exerciseDate, Date updatedAt){
+        this.exerciseNameId = exerciseNameId;
        this.sets = sets;
        this.reps = reps;
        this.didPass = didPass;
        this.exerciseDate = updatedAt;
     }
 
-    public ExerciseHistoryEntity(int id, String exerciseName, String sets, String reps, boolean didPass, Date exerciseDate, Date updatedAt) {
+    @Ignore
+    public ExerciseHistoryEntity(int id, int exerciseNameId, String sets, String reps, boolean didPass, Date exerciseDate, Date updatedAt) {
         this.id = id;
-        this.exerciseName = exerciseName;
+        this.exerciseNameId = exerciseNameId;
         this.sets = sets;
         this.reps = reps;
         this.didPass = didPass;
@@ -49,12 +60,12 @@ public class ExerciseHistoryEntity {
 
     }
 
-    public String getExerciseName() {
-        return exerciseName;
+    public int getExerciseNameId() {
+        return exerciseNameId;
     }
 
-    public void setExerciseName(String exerciseName) {
-        this.exerciseName = exerciseName;
+    public void setExerciseNameId(int exerciseNameId) {
+        this.exerciseNameId = exerciseNameId;
     }
 
     public int getId() {
@@ -103,5 +114,40 @@ public class ExerciseHistoryEntity {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeInt(exerciseNameId);
+        parcel.writeString(sets);
+        parcel.writeString(reps);
+        parcel.writeInt(didPass? 1: 0);
+        parcel.writeString(DateUtils.convertDateToString(exerciseDate));
+    }
+
+    public static final Parcelable.Creator<ExerciseHistoryEntity> CREATOR
+            = new Parcelable.Creator<ExerciseHistoryEntity>() {
+        public ExerciseHistoryEntity createFromParcel(Parcel in) {
+            return new ExerciseHistoryEntity(in);
+        }
+
+        public ExerciseHistoryEntity[] newArray(int size) {
+            return new ExerciseHistoryEntity[size];
+        }
+    };
+
+    private ExerciseHistoryEntity(Parcel in) {
+        id = in.readInt();
+        exerciseNameId = in.readInt();
+        sets = in.readString();
+        reps = in.readString();
+        didPass = in.readInt() == 1 ? true: false;
+        exerciseDate = DateUtils.convertStringToDate(in.readString());
     }
 }

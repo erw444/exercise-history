@@ -11,15 +11,18 @@ import java.util.List;
 @Dao
 public interface ExerciseNameDao {
     @Insert
-    void insert(ExerciseName exerciseName);
+    long insert(ExerciseName exerciseName);
 
     @Query("DELETE FROM exercise_names")
     void deleteAll();
 
-    @Query("SELECT exercise_name from exercise_names ORDER BY exercise_name ASC")
+    @Query("SELECT * from exercise_names ORDER BY exercise_name_id ASC")
     LiveData<List<ExerciseName>> getAllExerciseNames();
 
     @Query("SELECT * from exercise_names where exercise_name = :exerciseName")
     ExerciseName findExerciseName(String exerciseName);
+
+    @Query("SELECT * from exercise_names where exercise_name_id = :exerciseNameId")
+    ExerciseName findExerciseName(int exerciseNameId);
 
 }

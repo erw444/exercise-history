@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.erw.android.exercisehistory.database.ExerciseHistoryEntity;
+import com.erw.android.exercisehistory.database.ExerciseHistoryEntityWithExerciseName;
 import com.erw.android.exercisehistory.database.ExerciseName;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class ExerciseHistoryAdapter extends RecyclerView.Adapter<ExerciseHistory
     }
 
     private final LayoutInflater mInflater;
-    private List<ExerciseHistoryEntity> mExerciseHistory; // Cached copy of words
+    private List<ExerciseHistoryEntityWithExerciseName> mExerciseHistory; // Cached copy of words
 
     ExerciseHistoryAdapter(Context context) { mInflater = LayoutInflater.from(context); }
 
@@ -36,15 +37,15 @@ public class ExerciseHistoryAdapter extends RecyclerView.Adapter<ExerciseHistory
     @Override
     public void onBindViewHolder(ExerciseHistoryViewHolder holder, int position) {
         if (mExerciseHistory != null) {
-            ExerciseHistoryEntity current = mExerciseHistory.get(position);
-            holder.exerciseHistoryViewHolder.setText(current.getExerciseName());
+            ExerciseHistoryEntityWithExerciseName current = mExerciseHistory.get(position);
+            holder.exerciseHistoryViewHolder.setText(current.exerciseName.getExerciseName());
         } else {
             // Covers the case of data not being ready yet.
             holder.exerciseHistoryViewHolder.setText("No Exercises");
         }
     }
 
-    void setExerciseHistory(List<ExerciseHistoryEntity> exerciseHistory){
+    void setExerciseHistory(List<ExerciseHistoryEntityWithExerciseName> exerciseHistory){
         mExerciseHistory = exerciseHistory;
         notifyDataSetChanged();
     }

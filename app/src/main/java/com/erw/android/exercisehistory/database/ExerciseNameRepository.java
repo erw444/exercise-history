@@ -29,6 +29,10 @@ public class ExerciseNameRepository {
         return mExerciseNameDao.findExerciseName(exerciseName);
     }
 
+    public ExerciseName getExerciseName(int exerciseNameId){
+        return mExerciseNameDao.findExerciseName(exerciseNameId);
+    }
+
     private static class insertAsyncTask extends AsyncTask<ExerciseName, Void, Void> {
         private ExerciseNameDao mAsyncTaskDao;
 

@@ -27,6 +27,9 @@ public interface ExerciseHistoryDao {
     @Delete
     void delete(ExerciseHistoryEntity exerciseHistoryEntity);
 
-    @Query("SELECT * FROM exercise_history WHERE id = :id")
+    @Query("SELECT * FROM exercise_history WHERE exercise_history_id = :id")
     LiveData<ExerciseHistoryEntity> loadExerciseById(int id);
+
+    @Query("SELECT * FROM exercise_history INNER JOIN exercise_names ON eh_exercise_name_id = exercise_name_id")
+    public LiveData<List<ExerciseHistoryEntityWithExerciseName>> getExerciseHistory();
 }

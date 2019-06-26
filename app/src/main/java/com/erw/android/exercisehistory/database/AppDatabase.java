@@ -12,7 +12,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 
-@Database(entities = {ExerciseHistoryEntity.class, ExerciseName.class}, version = 2, exportSchema = false)
+@Database(entities = {ExerciseHistoryEntity.class, ExerciseName.class}, version = 4, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -59,7 +59,6 @@ public abstract class AppDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
-            mDao.deleteAll();
             ExerciseName name = new ExerciseName("Push Ups");
             mDao.insert(name);
             name = new ExerciseName("Sit Ups");
